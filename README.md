@@ -1,11 +1,25 @@
 <h1 align="center">React Native Copilot</h1>
 
+<div align="center">
+  <p align="center">
+    <a href="https://semaphoreci.com/okgrow/react-native-co-pilot">
+      <img src="https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg" alt="Build Status" />
+    </a>
+    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
+      <img src="https://img.shields.io/npm/v/@okgrow/react-native-copilot.svg" alt="NPM Version" />
+    </a>
+    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
+      <img src="https://img.shields.io/npm/dm/@okgrow/react-native-copilot.svg" alt="NPM Downloads" />
+    </a>
+  </p>
+</div>
+
 <p align="center">
   Step-by-step walkthrough for your react native app!
 </p>
 
 <p align="center">
-  <img src="https://media.giphy.com/media/4ZvoxeFdW7jeSETYsX/giphy.gif" alt="React Native Copilot" />
+  <img src="https://media.giphy.com/media/65VKIzGWZmHiEgEBi7/giphy.gif" alt="React Native Copilot" />
 </p>
 
 <p align="center">
@@ -101,40 +115,7 @@ copilot({
   animated: true, // or false
 })(RootComponent);
 ```
-### Custom component over the overlay
-This comes in handy when you want to show some kind of icon (like swipe gesture) on top of the overlay. The CopilotStep component accepts a prop called "overlayElement" that must return a react component wrapped inside a function. The position, size, nextHandle and previousHandle are automatically injected into this function.
 
-```js
-import { React, { Component } } from "react";
-import { View } from "react-native";
-
-class Example extends Component {
-  renderOverlayElement = (position, size, handleNext, handlePrevious) => {
-    //Displays this in the center of the overlay
-    return (
-      <View style={{
-        position: "absolute",
-        top: position.y + size.y/3
-        left: position.x + size.x/3
-      }}>
-        //...
-      </View>
-    );
-  }
-  render(){
-    <CopilotStep
-            name={}
-            text={}
-            order={}
-            {...overlayElement && {
-              overlayElement: this.renderOverlayElement
-            }}
-          >
-          //...
-    </CopilotStep>
-  }
-}
-```
 ### Custom tooltip component
 You can customize the tooltip by passing a component to the `copilot` HOC maker. If you are looking for an example tooltip component, take a look at [the default tooltip implementation](https://github.com/okgrow/react-native-copilot/blob/master/src/components/Tooltip.js).
 
@@ -173,16 +154,6 @@ copilot({
 })(RootComponent)
 ```
 
-### Custom mask color 
-You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a color string to the `copilot` HOC maker. 
-
-```js
-
-copilot({
-  backdropColor:"rgba(50, 50, 100, 0.9)",
-})(RootComponent)
-```
-
 ### Custom components as steps
 The components wrapped inside `CopilotStep`, will receive a `copilot` prop of type `Object` which the outermost rendered element of the component or the element that you want the tooltip be shown around, must extend.
 
@@ -207,34 +178,6 @@ class HomeScreen {
 ### Triggering the tutorial
 Use `this.props.start()` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
 
-### Usage inside a ScrollView
-Pass the ScrollView reference as the second argument to the `this.props.start()` function.
-eg `this.props.start(false, ScrollViewRef)`
-
-```js
-import { ScrollView } from 'react-native';
-import { copilot } from '@okgrow/react-native-copilot';
-
-class HomeScreen {
-  componentDidMount() {
-    // Starting the tutorial and passing the scrollview reference.
-    this.props.start(false, this.scrollView);
-  }
-  
-  componentWillUnmount() {
-    // Don't forget to disable event handlers to prevent errors
-    this.props.copilotEvents.off('stop');
-  }
-
-  render() {
-    <ScrollView ref={ref => this.scrollView = ref}>
-        // ...
-    </ScrollView>
-  }
-}
-export default copilot()(HomeScreen);
-```
-
 ### Listening to the events
 Along with `this.props.start()`, `copilot` HOC passes `copilotEvents` function to the component to help you with tracking of tutorial progress. It utilizes [mitt](https://github.com/developit/mitt) under the hood, you can see how full API there.
 
@@ -247,15 +190,12 @@ List of available events is:
 
 **Example:**
 ```js
-import { ScrollView } from 'react-native';
 import { copilot, CopilotStep } from '@okgrow/react-native-copilot';
 
 const CustomComponent = ({ copilot }) => <View {...copilot}><Text>Hello world!</Text></View>;
 
 class HomeScreen {
   componentDidMount() {
-    // Starting the tutorial.
-    this.props.start(false, this.scrollView);
     this.props.copilotEvents.on('stop', () => {
       // Copilot tutorial finished!
     });
@@ -267,9 +207,7 @@ class HomeScreen {
   }
 
   render() {
-    <ScrollView ref={ref => this.scrollView = ref}>
-        // ...
-    </ScrollView>
+    // ...
   }
 }
 ```

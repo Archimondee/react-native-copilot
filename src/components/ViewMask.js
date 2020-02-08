@@ -17,7 +17,6 @@ type Props = {
   easing: func,
   animationDuration: number,
   animated: boolean,
-  backdropColor: string,
 };
 
 type State = {
@@ -32,9 +31,9 @@ class ViewMask extends Component<Props, State> {
     position: new Animated.ValueXY({ x: 0, y: 0 }),
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.position !== nextProps.position || this.props.size !== nextProps.size) {
-      this.animate(nextProps.size, nextProps.position);
+  componentDidUpdate(prevProps) {
+    if (prevProps.position !== this.props.position || prevProps.size !== this.props.size) {
+      this.animate(this.props.size, this.props.position);
     }
   }
 
@@ -80,7 +79,6 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               right: leftOverlayRight,
-              backgroundColor: this.props.backdropColor,
             }]}
         />
         <Animated.View
@@ -88,7 +86,6 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               left: rightOverlayLeft,
-              backgroundColor: this.props.backdropColor,
             }]}
         />
         <Animated.View
@@ -98,7 +95,6 @@ class ViewMask extends Component<Props, State> {
               top: bottomOverlayTopBoundary,
               left: verticalOverlayLeftBoundary,
               right: verticalOverlayRightBoundary,
-              backgroundColor: this.props.backdropColor,
             },
           ]}
         />
@@ -109,7 +105,6 @@ class ViewMask extends Component<Props, State> {
               bottom: topOverlayBottomBoundary,
               left: verticalOverlayLeftBoundary,
               right: verticalOverlayRightBoundary,
-              backgroundColor: this.props.backdropColor,
             },
           ]}
         />
